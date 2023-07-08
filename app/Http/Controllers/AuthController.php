@@ -1,0 +1,79 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Requests\AuthRequest;
+use App\Http\Requests\RegisterRequest;
+use App\Models\User;
+use Illuminate\Http\Client\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+
+use function PHPUnit\Framework\throwException;
+
+class AuthController extends Controller
+{
+
+    const ROLE_USER = 2;
+
+    public function register(RegisterRequest $request)
+    {
+        $user = User::where(['email' => $request['email']])->first();
+
+        if (!empty($user)) {
+            return response()->json([
+                'message' => 'user already exist'
+            ], 404);
+        }
+
+        $userData = User::create($this->mappingPayloadRequest($request->all()));
+
+        $token = $userData->createToken('auth_token')->plainTextToken;
+
+        return response()->json([
+            "message" => 'Login successfully',
+            'data' => $userData,
+            'access_token' => $token
+        ], 200);
+    }
+
+    private function mappingPayloadRequest(array $payload): array
+    {
+        return [
+            'name' => $payload['name'],
+            'email' => $payload['email'],
+            'password' => Hash::make($payload['password']),
+            'role' => self::ROLE_USER
+        ];
+    }
+
+    public function login(AuthRequest $request)
+    {
+        $credentials = $request->only('email', 'password');
+
+        if (!Auth::attempt($credentials)) {
+            return response()->json([
+                'message' => 'Bad credentials'
+            ], 401);
+        }
+
+        $user = User::where(['email' => $credentials['email'], 'deleted_at' => null])->first();
+
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        return response()->json([
+            "message" => 'Login successfully',
+            'data' => $user,
+            'access_token' => $token
+        ], 200);
+    }
+
+    public function logout()
+    {
+        request()->user()->currentAccessToken()->delete();
+
+        return response()->json([
+            'message' => 'Logged out successfully'
+        ], 200);
+    }
+}
