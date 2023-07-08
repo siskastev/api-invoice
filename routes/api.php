@@ -25,13 +25,14 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/profile', function() {
         return auth()->user();
     });
-    Route::get('/products', [ProductController::class, 'get']);
+    Route::get('/products', [ProductController::class, 'index']);
     Route::post('/logout', [AuthController::class, 'logout']);
     
     // Routes accessible to users with role 1 is admin
     Route::group(['middleware' => ['role:1']], function () {
-        Route::get('/customers', [CustomerController::class, 'get']);
+        Route::get('/customers', [CustomerController::class, 'index']);
+        Route::get('/invoice', [InvoiceController::class, 'index']);
         Route::post('/invoice', [InvoiceController::class, 'create']);
-        Route::get('/invoice/{code}', [InvoiceController::class, 'get']);
+        Route::get('/invoice/{code}', [InvoiceController::class, 'show']);
     });
 });
