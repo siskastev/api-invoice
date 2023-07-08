@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Http\Requests\StoreCustomerRequest;
 use App\Http\Requests\UpdateCustomerRequest;
+use Illuminate\Http\Request;
 
 class CustomerController extends Controller
 {
@@ -13,9 +14,34 @@ class CustomerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $queryStringArray = $request->only('per_page', 'keyword');
+        $perPage = $queryStringArray['per_page'] ?? 10;
+        $keyword = $queryStringArray['keyword'] ?? null;
+
+        $currentPage = $request->query('page') ?: 1;
+
+        $query = Customer::query();
+
+        if (!empty($keyword)) {
+            $query->where('name', 'like', '%' . $keyword . '%');
+        }
+
+        $customers = $query->where('deleted_at', null)->paginate($perPage);
+
+        return response()->json([
+            'messages' => "OK",
+            'data' => $customers->items(),
+            'metadata' => [
+                'current_page' => $currentPage,
+                'from' => $customers->firstItem(),
+                'last_page' => $customers->lastPage(),
+                'per_page' => $customers->perPage(),
+                'to' => $customers->lastItem(),
+                'total' => $customers->total(),
+            ],
+        ], 200);
     }
 
     /**
