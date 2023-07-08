@@ -20,8 +20,7 @@ class CreateCustomersTable extends Migration
             $table->string('country', 100);
             $table->string('city', 100);
             $table->timestamps();
-            $table->timestamp('deleted_at')->nullable()->index();
-            $table->string('deleted_by',100)->nullable();
+            $table->softDeletes()->index();
         });
     }
 

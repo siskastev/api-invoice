@@ -16,7 +16,7 @@ class CreateInvoiceSummaryProductsTable extends Migration
         Schema::create('invoice_summary_products', function (Blueprint $table) {
             $table->id();
             $table->string("invoice_code", 100);
-            $table->string("product_id");
+            $table->uuid("product_id");
             $table->unsignedDouble('qty');
             $table->unsignedDouble('unit_price');
             $table->unsignedDouble('total_price');

@@ -19,7 +19,7 @@ class CreateInvoicesTable extends Migration
             $table->string('subject', 100)->index();
             $table->date('issue_date')->index();
             $table->date('due_date')->index();
-            $table->string('customer_id');
+            $table->uuid('customer_id');
             $table->unsignedInteger('total_items')->index();
             $table->unsignedDouble('sub_total');
             $table->unsignedDouble('grand_total');
