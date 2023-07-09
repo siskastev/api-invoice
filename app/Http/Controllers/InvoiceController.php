@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Invoice;
 use App\Http\Requests\StoreInvoiceRequest;
-use App\Http\Requests\UpdateInvoiceRequest;
 use App\Models\InvoiceSummaryProduct;
+use Illuminate\Http\JsonResponse;
+// use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 
 class InvoiceController extends Controller
@@ -13,6 +14,7 @@ class InvoiceController extends Controller
 
     const TAX_INVOICE = 0.1;
     const STATUS_UNPAID = 0;
+    const STATUS_PAID = 1;
     /**
      * Display a listing of the resource.
      *
@@ -46,9 +48,9 @@ class InvoiceController extends Controller
 
         $transaction = function () use ($payloads) {
             $payloadsInvoice = $this->mappingInvoices($payloads);
-            $payloadsProducts = $this->mappingProducts($payloads);
-
             Invoice::create($payloadsInvoice);
+
+            $payloadsProducts = $this->mappingProducts($payloads);
             InvoiceSummaryProduct::insert($payloadsProducts);
         };
 
@@ -136,13 +138,63 @@ class InvoiceController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateInvoiceRequest  $request
+     * @param  \App\Http\Requests\StoreInvoiceRequest  $request
      * @param  string code invoice
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateInvoiceRequest $request, string $code)
+    public function update(StoreInvoiceRequest $request, string $code)
     {
-        //
+        $invoice = $this->validatedInvoiceCode($code);
+
+        if ($invoice instanceof JsonResponse) {
+            return $invoice;
+        }
+
+        $payloads = $request->all();
+        $payloads['code'] = $code;
+
+        $transaction = function () use ($payloads, $invoice) {
+            $payloadsProducts = $this->mappingProducts($payloads);
+            InvoiceSummaryProduct::where('invoice_code', $payloads['code'])->delete();
+            InvoiceSummaryProduct::insert($payloadsProducts);
+
+            $payloadsInvoice = $this->mappingInvoices($payloads);
+            unset($payloadsInvoice['code']);
+            $invoice->update($payloadsInvoice);
+        };
+
+        try {
+            DB::transaction($transaction);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Failed to update invoice',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+
+        return response()->json([
+            'message' => 'Invoice update successfully',
+            'data' => $payloads,
+        ], 200);
+    }
+
+    private function validatedInvoiceCode(string $code)
+    {
+        $invoice = Invoice::firstWhere('code', $code);
+
+        if (!$invoice) {
+            return response()->json([
+                'message' => sprintf('%s invoice not found!!', $code)
+            ], 404);
+        }
+
+        if ($invoice->status === self::STATUS_PAID) {
+            return response()->json([
+                'message' => sprintf('%s invoice already PAID!!', $code)
+            ], 400);
+        }
+
+        return $invoice;
     }
 
     /**

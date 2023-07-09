@@ -9,12 +9,16 @@ class Invoice extends Model
 {
     use HasFactory;
 
+    const STATUS_PAID = 1;
+
     /**
      * The table associated with the model.
      *
      * @var string
      */
     protected $table = 'invoices';
+
+    protected $primaryKey = 'code';
 
     protected $fillable = [
         'code',
