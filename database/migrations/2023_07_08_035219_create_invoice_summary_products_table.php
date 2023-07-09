@@ -17,6 +17,7 @@ class CreateInvoiceSummaryProductsTable extends Migration
             $table->id();
             $table->string("invoice_code", 100);
             $table->uuid("product_id");
+            $table->string("product_name",100);
             $table->unsignedDouble('qty');
             $table->unsignedDouble('unit_price');
             $table->unsignedDouble('total_price');
