@@ -9,6 +9,8 @@ class InvoiceSummaryProduct extends Model
 {
     use HasFactory;
 
+    protected $table = 'invoice_summary_products';
+
     protected $fillable = [
         'invoice_code',
         'product_id',

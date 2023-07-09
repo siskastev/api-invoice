@@ -116,12 +116,25 @@ class InvoiceController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\invoice  $invoice
+     * @param  string $code
      * @return \Illuminate\Http\Response
      */
-    public function show(invoice $invoice)
+    public function show(string $code)
     {
-        //
+        $invoice = Invoice::findByCode($code);
+        
+        if (!$invoice) {
+            return response()->json([
+                'message' => sprintf('%s invoice not found!!', $code)
+            ], 404);
+        }
+        
+        $invoice['products'] = InvoiceSummaryProduct::where('invoice_code', $code)->get();
+        
+        return response()->json([
+            "messages" => "OK",
+            "data" => $invoice
+        ], 200);
     }
 
     /**
@@ -139,7 +152,7 @@ class InvoiceController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \App\Http\Requests\StoreInvoiceRequest  $request
-     * @param  string code invoice
+     * @param  string $code
      * @return \Illuminate\Http\Response
      */
     public function update(StoreInvoiceRequest $request, string $code)
