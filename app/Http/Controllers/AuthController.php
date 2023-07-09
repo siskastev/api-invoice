@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 use function PHPUnit\Framework\throwException;
 
@@ -18,23 +19,32 @@ class AuthController extends Controller
 
     public function register(RegisterRequest $request)
     {
-        $user = User::where(['email' => $request['email']])->first();
+        try {
+            $user = User::where(['email' => $request['email']])->first();
 
-        if (!empty($user)) {
+            if (!empty($user)) {
+                return response()->json([
+                    'message' => 'User already exists'
+                ], 400);
+            }
+
+            $userData = User::create($this->mappingPayloadRequest($request->all()));
+
+            $token = $userData->createToken('auth_token')->plainTextToken;
+
             return response()->json([
-                'message' => 'user already exist'
-            ], 404);
+                "message" => 'User created successfully',
+                'data' => $userData,
+                'access_token' => $token
+            ], 200);
+            
+        } catch (\Exception $e) {
+            Log::error('Error creating user: ' . $e->getMessage());
+
+            return response()->json([
+                'message' => 'An error occurred while creating the user'
+            ], 500);
         }
-
-        $userData = User::create($this->mappingPayloadRequest($request->all()));
-
-        $token = $userData->createToken('auth_token')->plainTextToken;
-
-        return response()->json([
-            "message" => 'Login successfully',
-            'data' => $userData,
-            'access_token' => $token
-        ], 200);
     }
 
     private function mappingPayloadRequest(array $payload): array
