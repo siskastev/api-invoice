@@ -20,13 +20,6 @@ class AuthController extends Controller
     public function register(RegisterRequest $request)
     {
         try {
-            $user = User::where(['email' => $request['email']])->first();
-
-            if (!empty($user)) {
-                return response()->json([
-                    'message' => 'User already exists'
-                ], 400);
-            }
 
             $userData = User::create($this->mappingPayloadRequest($request->all()));
 
