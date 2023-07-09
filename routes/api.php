@@ -32,7 +32,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::group(['middleware' => ['role:1']], function () {
         Route::get('/customers', [CustomerController::class, 'index']);
         Route::get('/invoice', [InvoiceController::class, 'index']);
-        Route::post('/invoice', [InvoiceController::class, 'create']);
+        Route::post('/invoice', [InvoiceController::class, 'store']);
         Route::get('/invoice/{code}', [InvoiceController::class, 'show']);
     });
 });
