@@ -21,7 +21,8 @@ class CreateInvoiceSummaryProductsTable extends Migration
             $table->unsignedDouble('qty');
             $table->unsignedDouble('unit_price');
             $table->unsignedDouble('total_price');
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
             $table->foreign('invoice_code')
                 ->references('code')
                 ->on('invoices')
