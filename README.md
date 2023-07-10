@@ -77,7 +77,7 @@ php artisan serve
 * `DELETE /api/invoice/{code}`: Delete a invoice.
 
 ## Postman Collection
-A Postman collection `API-INVOICE-LARAVEL.postman_collection.json` is provided in this project. You can import the collection into Postman to quickly test the API endpoints. The collection includes pre-configured requests for each endpoint, allowing you to easily interact with the API and view the responses.
+A Postman collection `API-INVOICE-LARAVEL.postman_collection.json` and env for token `laravel-api-invoice.postman_environment` is provided in this project. You can import the collection into Postman to quickly test the API endpoints. The collection includes pre-configured requests for each endpoint, allowing you to easily interact with the API and view the responses.
 
 ## Authentication
 The API uses Laravel Sanctum for API token authentication. To authenticate requests, include the API token in the request headers:
