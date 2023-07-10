@@ -62,7 +62,7 @@ php artisan serve
 * `PUT /api/customers/{id}`: Update an existing customer.
 * `DELETE /api/customers/{id}`: Delete a customer.
 
-  ### Products Admin Role
+### Products Admin Role
 * `GET /api/products`: Retrieve all products.
 * `GET /api/products/{id}`: Retrieve a specific customer by ID.
 * `POST /api/products`: Create a new product(Admin role required).
