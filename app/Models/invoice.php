@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -63,7 +62,7 @@ class Invoice extends Model
             ->first();
     }
 
-    public static function getAll(array $filters): Collection
+    public static function getAll(array $filters, int $currentPage, int $perPage): array
     {
         $query = static::join('customers', 'invoices.customer_id', '=', 'customers.id')
             ->select([
@@ -100,6 +99,18 @@ class Invoice extends Model
             }
         }
 
-        return $query->orderBy('invoices.created_at', 'desc')->get();
+        $invoices = $query->orderBy('invoices.created_at', 'desc')->paginate($perPage, ['*'], 'page', $currentPage);
+
+        return [
+            'data' => $invoices->items(),
+            'metadata' => [
+                'current_page' => $invoices->currentPage(),
+                'from' => $invoices->firstItem(),
+                'last_page' => $invoices->lastPage(),
+                'per_page' => $invoices->perPage(),
+                'to' => $invoices->lastItem(),
+                'total' => $invoices->total(),
+            ],
+        ];
     }
 }

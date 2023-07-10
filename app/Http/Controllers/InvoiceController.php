@@ -32,11 +32,16 @@ class InvoiceController extends Controller
             'status'
         ]);
 
-        $invoice = Invoice::getAll($filters);
+        $currentPage = request()->query('page') ?: 1;
+
+        $perPage = request()->query('per_page') ?: 10;
+
+        $invoices = Invoice::getAll($filters, $currentPage, $perPage);
 
         return response()->json([
             'messages' => "OK",
-            'data' => $invoice
+            'data' => $invoices['data'],
+            'metadata' => $invoices['metadata']
         ], 200);
     }
 

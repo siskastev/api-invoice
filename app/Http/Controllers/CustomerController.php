@@ -28,13 +28,13 @@ class CustomerController extends Controller
             $query->where('name', 'like', '%' . $keyword . '%');
         }
 
-        $customers = $query->where('deleted_at', null)->paginate($perPage);
+        $customers = $query->where('deleted_at', null)->paginate($perPage, ['*'], 'page', $currentPage);
 
         return response()->json([
             'messages' => "OK",
             'data' => $customers->items(),
             'metadata' => [
-                'current_page' => $currentPage,
+                'current_page' => $customers->currentPage(),
                 'from' => $customers->firstItem(),
                 'last_page' => $customers->lastPage(),
                 'per_page' => $customers->perPage(),
