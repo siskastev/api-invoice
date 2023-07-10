@@ -28,15 +28,19 @@ git clone https://github.com/siskastev/api-invoice.git
 cd laravel-api-invoice
 ```
 3. Rename .env.example to .env
-4. Install the dependencies:
+4. Generate the application key:
+```bash
+php artisan key:generate
+```
+5. Install the dependencies:
 ```bash
 composer install
 ```
-5. Navigate to the migrations and seed the database:
+6. Navigate to the migrations and seed the database:
 ```bash
 php artisan migrate --seed
 ```
-6. Start the development server:
+7. Start the development server:
 ```bash
 php artisan serve
 ```
