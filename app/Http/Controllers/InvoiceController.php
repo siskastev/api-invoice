@@ -22,7 +22,22 @@ class InvoiceController extends Controller
      */
     public function index()
     {
-        //
+        $filters = request()->only([
+            'code',
+            'issue_date',
+            'due_date',
+            'subject',
+            'total_items',
+            'customer_name',
+            'status'
+        ]);
+
+        $invoice = Invoice::getAll($filters);
+
+        return response()->json([
+            'messages' => "OK",
+            'data' => $invoice
+        ], 200);
     }
 
     /**
@@ -122,15 +137,15 @@ class InvoiceController extends Controller
     public function show(string $code)
     {
         $invoice = Invoice::findByCode($code);
-        
+
         if (!$invoice) {
             return response()->json([
                 'message' => sprintf('%s invoice not found!!', $code)
             ], 404);
         }
-        
+
         $invoice['products'] = InvoiceSummaryProduct::where('invoice_code', $code)->get();
-        
+
         return response()->json([
             "messages" => "OK",
             "data" => $invoice
