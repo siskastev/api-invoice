@@ -72,12 +72,14 @@ php artisan serve
 * `PUT /api/invoice/{code}`: Update an existing invoice.
 * `DELETE /api/invoice/{code}`: Delete a invoice.
 
+## Postman Collection
+A Postman collection `API-INVOICE-LARAVEL.postman_collection.json` is provided in this project. You can import the collection into Postman to quickly test the API endpoints. The collection includes pre-configured requests for each endpoint, allowing you to easily interact with the API and view the responses.
+
 ## Authentication
 The API uses Laravel Sanctum for API token authentication. To authenticate requests, include the API token in the request headers:
 `Authorization: Bearer {api_token}`. To log in as the admin user, use the following credentials:
 * `Email`: admin@gmail.com
 * `Password`: admin
-
 
 
 
