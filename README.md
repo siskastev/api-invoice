@@ -67,7 +67,7 @@ php artisan serve
 
 ### Invoice Admin Role
 * `GET /api/invoice`: Retrieve all invoice.
-* `GET /api/invoice/{id}`: Retrieve a specific invoice by code.
+* `GET /api/invoice/{code}`: Retrieve a specific invoice by code.
 * `POST /api/invoice`: Create a new invoice.
 * `PUT /api/invoice/{code}`: Update an existing invoice.
 * `DELETE /api/invoice/{code}`: Delete a invoice.
