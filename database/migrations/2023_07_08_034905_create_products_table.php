@@ -22,7 +22,6 @@ class CreateProductsTable extends Migration
             $table->unsignedDouble('total_price');
             $table->timestamps();
             $table->timestamp('deleted_at')->nullable();
-            $table->string('deleted_by', 100)->nullable();
             $table->index(['deleted_at','name']);
         });
     }

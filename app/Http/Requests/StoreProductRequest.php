@@ -13,7 +13,7 @@ class StoreProductRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,17 @@ class StoreProductRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name' => 'required|min:3|max:100',
+            'type' => 'required|in:service,hardware,subscription',
+            'qty' => 'required|numeric|between:1,200',
+            'unit_price' => 'required|numeric|min:1',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'type.in' => 'The selected type is invalid, Please choose type service, hardware, or subscription.',
         ];
     }
 }
