@@ -84,4 +84,17 @@ class CustomerTest extends TestCase
                 'data' => $payload
             ]);
     }
+
+    public function testSoftDeleteCustomers()
+    {
+        $customer = Customer::factory()->create();
+
+        $this->deleteJson('api/customers/' . $customer->id)
+            ->assertStatus(200)
+            ->assertJson([
+                'message' => sprintf('Customer %s delete successfully', $customer->id)
+            ]);
+
+        $this->assertSoftDeleted($customer);
+    }
 }
