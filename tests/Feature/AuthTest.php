@@ -148,11 +148,20 @@ class AuthTest extends TestCase
                 "id",
                 "name",
                 "email",
-            "email_verified_at",
+                "email_verified_at",
                 "role",
                 "created_at",
                 "updated_at",
                 "deleted_at",
+            ])->assertExactJson([
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'email_verified_at' => $user->email_verified_at->toISOString(),
+                'role' => (string) User::ROLE_USER,
+                "created_at" => $user->created_at->toISOString(),
+                "updated_at" => $user->updated_at->toISOString(),
+                "deleted_at" => null
             ]);
     }
 }
