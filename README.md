@@ -25,7 +25,7 @@ git clone https://github.com/siskastev/api-invoice.git
 ```
 2. Navigate to the project directory:
 ```bash
-cd laravel-api-invoice
+cd api-invoice
 ```
 3. Rename .env.example to .env
 4. Generate the application key:
