@@ -209,7 +209,7 @@ class InvoiceController extends Controller
 
     private function validatedInvoiceCode(string $code)
     {
-        $invoice = Invoice::firstWhere('code', $code);
+        $invoice = Invoice::find($code);
 
         if (!$invoice) {
             return response()->json([
