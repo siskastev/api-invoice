@@ -18,7 +18,7 @@ class RoleBasedAuthMiddleware
     {
         $user = $request->user();
 
-        if (!$user || !$user->role === $role) {
+        if (!$user || $user->role !== $role) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
