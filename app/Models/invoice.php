@@ -9,8 +9,6 @@ class Invoice extends Model
 {
     use HasFactory;
 
-    const STATUS_PAID = 1;
-
     /**
      * The table associated with the model.
      *
@@ -23,6 +21,10 @@ class Invoice extends Model
     public $incrementing = false;
 
     protected $keyType = 'string';
+
+    const STATUS_PAID = 1;
+    const TAX_INVOICE = 0.1;
+    const STATUS_UNPAID = 0;
 
     protected $fillable = [
         'code',

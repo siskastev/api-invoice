@@ -11,10 +11,6 @@ use Illuminate\Support\Facades\DB;
 
 class InvoiceController extends Controller
 {
-
-    const TAX_INVOICE = 0.1;
-    const STATUS_UNPAID = 0;
-    const STATUS_PAID = 1;
     /**
      * Display a listing of the resource.
      *
@@ -110,11 +106,11 @@ class InvoiceController extends Controller
     private function mappingInvoices(array $payloads): array
     {
         $subTotal = $this->getSubTotal($payloads['products']);
-        $taxAmount = $subTotal * self::TAX_INVOICE;
+        $taxAmount = $subTotal * Invoice::TAX_INVOICE;
 
         return [
             'code' => $payloads['code'],
-            'status' => self::STATUS_UNPAID,
+            'status' => Invoice::STATUS_UNPAID,
             'subject' => $payloads['subject'],
             'issue_date' => $payloads['issue_date'],
             'due_date' => $payloads['due_date'],
@@ -221,7 +217,7 @@ class InvoiceController extends Controller
             ], 404);
         }
 
-        if ($invoice->status === self::STATUS_PAID) {
+        if ($invoice->status === Invoice::STATUS_PAID) {
             return response()->json([
                 'message' => sprintf('%s invoice already PAID!!', $code)
             ], 400);
