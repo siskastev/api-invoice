@@ -31,7 +31,6 @@ class ProductController extends Controller
         }
 
         $products = $query
-            ->where('deleted_at', null)
             ->orderBy('created_at')
             ->paginate($perPage);
 

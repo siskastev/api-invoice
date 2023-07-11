@@ -29,7 +29,6 @@ class CustomerController extends Controller
         }
 
         $customers = $query
-            ->where('deleted_at', null)
             ->orderBy('created_at')
             ->paginate($perPage, ['*'], 'page', $currentPage);
 
