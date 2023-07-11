@@ -133,7 +133,7 @@ class CreateInvoiceTest extends TestCase
         $attribute = $this->mappingAttributeProduct();
 
         $product = Product::factory()->create([
-            "name" => $this->faker->word(),
+            "name" => 'Product 1',
             "type" => $attribute['type'],
             "qty" => $attribute['qty'],
             "unit_price" => $attribute['unit_price'],
@@ -180,7 +180,7 @@ class CreateInvoiceTest extends TestCase
         $attributeProducts = $this->mappingAttributeProduct();
 
         $products = Product::factory(3)->create([
-            "name" => $this->faker->word(),
+            "name" => 'product 1',
             "type" => $attributeProducts['type'],
             "qty" => $attributeProducts['qty'],
             "unit_price" => $attributeProducts['unit_price'],
@@ -222,7 +222,7 @@ class CreateInvoiceTest extends TestCase
         $attributeProducts = $this->mappingAttributeProduct();
 
         $products = Product::factory(2)->create([
-            "name" => $this->faker->word(),
+            "name" => 'product 1',
             "type" => $attributeProducts['type'],
             "qty" => $attributeProducts['qty'],
             "unit_price" => $attributeProducts['unit_price'],
@@ -272,7 +272,7 @@ class CreateInvoiceTest extends TestCase
         $attribute = $this->mappingAttributeProduct();
 
         $product = Product::factory()->create([
-            "name" => $this->faker->word(),
+            "name" => 'product 1',
             "type" => $attribute['type'],
             "qty" => $attribute['qty'],
             "unit_price" => $attribute['unit_price'],
