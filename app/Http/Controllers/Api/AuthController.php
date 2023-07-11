@@ -12,8 +12,6 @@ use Illuminate\Support\Facades\Log;
 class AuthController extends Controller
 {
 
-    const ROLE_USER = 2;
-
     public function register(RegisterRequest $request)
     {
         try {
@@ -43,7 +41,7 @@ class AuthController extends Controller
             'name' => $payload['name'],
             'email' => $payload['email'],
             'password' => Hash::make($payload['password']),
-            'role' => self::ROLE_USER
+            'role' => User::ROLE_USER
         ];
     }
 
