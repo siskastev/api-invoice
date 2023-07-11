@@ -35,22 +35,35 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // Routes accessible to users with role 1 is admin
     Route::group(['middleware' => ['role:1']], function () {
+
         //customers
-        Route::post('/customers', [CustomerController::class, 'store']);
-        Route::put('/customers/{id}', [CustomerController::class, 'update']);
-        Route::get('/customers', [CustomerController::class, 'index']);
-        Route::get('/customers/{id}', [CustomerController::class, 'show']);
-        Route::delete('/customers/{id}', [CustomerController::class, 'destroy']);
+        Route::prefix('customers')->group(function () {
+            Route::controller(CustomerController::class)->group(function () {
+                Route::post('/', 'store');
+                Route::put('/{id}', 'update');
+                Route::get('/', 'index');
+                Route::get('/{id}', 'show');
+                Route::delete('/{id}', 'destroy');
+            });
+        });
 
         //products
-        Route::post('/products', [ProductController::class, 'store']);
-        Route::put('/products/{id}', [ProductController::class, 'update']);
-        Route::delete('/products/{id}', [ProductController::class, 'destroy']);
+        Route::prefix('products')->group(function () {
+            Route::controller(ProductController::class)->group(function () {
+                Route::post('/', 'store');
+                Route::put('/{id}', 'update');
+                Route::delete('/{id}', 'destroy');
+            });
+        });
 
         //invoice
-        Route::get('/invoice', [InvoiceController::class, 'index']);
-        Route::post('/invoice', [InvoiceController::class, 'store']);
-        Route::put('/invoice/{code}', [InvoiceController::class, 'update']);
-        Route::get('/invoice/{code}', [InvoiceController::class, 'show']);
+        Route::prefix('invoice')->group(function () {
+            Route::controller(InvoiceController::class)->group(function () {
+                Route::get('/', 'index');
+                Route::post('/', 'store');
+                Route::put('/{code}', 'update');
+                Route::get('/{code}', 'show');
+            });
+        });
     });
 });
