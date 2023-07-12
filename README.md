@@ -15,7 +15,7 @@ This repository contains the Laravel API Invoice project for the technical test.
 - PHP 7.4 or higher
 - Composer
 - Laravel framework
-- MySQL database
+- MySQL 5.7 (database)
 
 ## Setup
 
